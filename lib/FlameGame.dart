@@ -5,12 +5,15 @@ import 'package:flame/flame.dart';
 import 'package:flame/gestures.dart';
 import 'dart:math';
 import 'package:flutter/gestures.dart';
+import 'package:first_flame_game/component/backyard.dart';
+import 'package:first_flame_game/component/HouseFly.dart';
 
 class FlameGame extends Game with TapDetector{
   Size screenSize;
   double tileSize;
   List<Fly> flyList;
   Random random;
+  Backyard background;
 
 
   FlameGame(){
@@ -21,15 +24,12 @@ class FlameGame extends Game with TapDetector{
     flyList = <Fly>[];//<Fly>[] substitui List<Fly>();
     random = Random();
     resize(await Flame.util.initialDimensions());
-
+    background = Backyard(this);
     spawnFly();
   }
 
   void render(Canvas canvas) {
-    Rect bgRect = Rect.fromLTWH(0, 0, screenSize.width, screenSize.height);
-    Paint bgPaint = Paint();
-    bgPaint.color = Color(0xff576574);
-    canvas.drawRect(bgRect, bgPaint);
+    background.render(canvas);
 
     flyList.forEach((Fly fly) => fly.render(canvas));
 
@@ -48,7 +48,7 @@ class FlameGame extends Game with TapDetector{
   void spawnFly() {
     double x = random.nextDouble() * (screenSize.width - tileSize);
     double y = random.nextDouble() * (screenSize.height - tileSize);
-    flyList.add(Fly(this, x, y));
+    flyList.add(HouseFly(this, x, y));
   }
 
   @override
